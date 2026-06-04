@@ -1,0 +1,31 @@
+@media (max-width: 768px) {
+    .nav-toggle { display: block; }
+
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: var(--nav-h);
+        left: 0;
+        right: 0;
+        background: var(--bg-soft);
+        border-bottom: 1px solid var(--border);
+        flex-direction: column;
+        padding: 16px 24px;
+        gap: 12px;
+    }
+
+    .nav-links.open { display: flex; }
+
+    .site-nav { position: relative; }
+
+    .hero { padding: 36px 24px; }
+    .hero h1 { font-size: 1.85rem; }
+
+    .detail-layout { grid-template-columns: 1fr; }
+
+    .promo-card { flex-direction: column; text-align: center; }
+
+    .invoice-actions { flex-direction: column; }
+    .invoice-actions form { width: 100%; }
+    .invoice-actions .btn { width: 100%; }
+}

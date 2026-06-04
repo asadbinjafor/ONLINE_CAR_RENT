@@ -1,0 +1,50 @@
+<?php
+return [
+    'GET' => [
+        '/' => ['HomeController', 'index'],
+        '/login' => ['AuthController', 'showLogin'],
+        '/register' => ['AuthController', 'showRegister'],
+        '/logout' => ['AuthController', 'logout'],
+        '/profile' => ['ProfileController', 'show'],
+        '/cars' => ['CarController', 'index'],
+        '/car' => ['CarController', 'show'],
+        '/order/create' => ['OrderController', 'createForm'],
+        '/order/invoice' => ['OrderController', 'invoice'],
+        '/order/payment' => ['OrderController', 'paymentForm'],
+        '/order/success' => ['OrderController', 'success'],
+        '/blog' => ['BlogController', 'index'],
+        '/admin' => ['AdminController', 'dashboard'],
+        '/admin/cars' => ['AdminController', 'cars'],
+        '/admin/cars/create' => ['AdminController', 'carCreateForm'],
+        '/admin/cars/edit' => ['AdminController', 'carEditForm'],
+        '/admin/members' => ['AdminController', 'members'],
+        '/admin/orders' => ['AdminController', 'orders'],
+    ],
+    'POST' => [
+        '/login' => ['AuthController', 'login'],
+        '/register' => ['AuthController', 'register'],
+        '/profile' => ['ProfileController', 'update'],
+        '/order/create' => ['OrderController', 'create'],
+        '/order/cancel' => ['OrderController', 'cancel'],
+        '/order/finalize' => ['OrderController', 'finalize'],
+        '/order/payment' => ['OrderController', 'processPayment'],
+        '/admin/cars/create' => ['AdminController', 'carStore'],
+        '/admin/cars/edit' => ['AdminController', 'carUpdate'],
+        '/admin/cars/delete' => ['AdminController', 'carDelete'],
+        '/api/admin/member/delete' => ['AdminApiController', 'deleteMember'],
+        '/api/blogs/create' => ['ApiController', 'blogCreate'],
+    ],
+    'DELETE' => [],
+    'GET_API' => [
+        '/api/cars/search' => ['ApiController', 'carSearch'],
+        '/api/order/calculate' => ['ApiController', 'calculateCost'],
+    ],
+    'PATTERNS' => [
+        'DELETE' => [
+            '#^/api/blogs/(\d+)$#' => ['ApiController', 'blogDelete'],
+        ],
+        'POST' => [
+            '#^/api/order/(\d+)/cancel$#' => ['ApiController', 'orderCancelAjax'],
+        ],
+    ],
+];
