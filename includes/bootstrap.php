@@ -2,6 +2,7 @@
 require_once dirname(__DIR__) . '/config/app.php';
 require_once dirname(__DIR__) . '/config/database.php';
 require_once __DIR__ . '/Security.php';
+require_once __DIR__ . '/Storage.php';
 require_once __DIR__ . '/Auth.php';
 
 Security::initSession();

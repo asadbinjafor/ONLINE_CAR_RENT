@@ -24,9 +24,9 @@ class BlogModel
 
     public function create(int $userId, string $title, string $content): int
     {
-        $st = db()->prepare('INSERT INTO blogs (user_id, title, content) VALUES (?,?,?)');
+        $st = db()->prepare('INSERT INTO blogs (user_id, title, content) VALUES (?,?,?) RETURNING id');
         $st->execute([$userId, $title, $content]);
-        return (int) db()->lastInsertId();
+        return (int) $st->fetchColumn();
     }
 
     public function delete(int $id): bool

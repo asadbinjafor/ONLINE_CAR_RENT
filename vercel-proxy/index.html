@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Starting Online Car Rent</title>
+  <style>
+    body{font:16px system-ui,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh;display:grid;place-items:center;margin:0;padding:24px}
+    main{max-width:420px;text-align:center}h1{color:#fb923c}button{background:#f97316;color:#fff;border:0;border-radius:6px;padding:12px 22px;cursor:pointer;font:inherit}
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Starting Online Car Rent</h1>
+    <p id="status" role="status" aria-live="polite">Connecting to the server…</p>
+    <button id="retry" type="button">Retry now</button>
+  </main>
+  <script>
+    const status = document.getElementById('status');
+    let successes = 0;
+    let timer;
+    let checking = false;
+
+    async function check(url) {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 12000);
+      try {
+        const response = await fetch(url, {cache: 'no-store', signal: controller.signal});
+        return response.status === 200;
+      } finally {
+        clearTimeout(timeout);
+      }
+    }
+
+    async function attempt() {
+      if (checking) return;
+      checking = true;
+      clearTimeout(timer);
+      status.textContent = 'Checking server and homepage…';
+      try {
+        const healthy = await check('/health.php');
+        const homepage = healthy && await check('/index.php');
+        successes = healthy && homepage ? successes + 1 : 0;
+        if (successes >= 2) {
+          status.textContent = 'Connected. Opening homepage…';
+          window.location.replace('/index.php');
+          return;
+        }
+        status.textContent = successes ? 'Connected. Confirming once more…' : 'Server is waking up. Retrying in 5 seconds…';
+      } catch (_) {
+        successes = 0;
+        status.textContent = 'Connection unavailable. Retrying in 5 seconds…';
+      } finally {
+        checking = false;
+        timer = setTimeout(attempt, 5000);
+      }
+    }
+    document.getElementById('retry').addEventListener('click', attempt);
+    attempt();
+  </script>
+</body>
+</html>

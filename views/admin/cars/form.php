@@ -44,7 +44,7 @@
         <div class="field">
             <label for="image">Car image (JPEG/PNG, max 2MB)<?= $isEdit ? ' — leave empty to keep current' : '' ?></label>
             <?php if ($isEdit && !empty($car['image_path'])): ?>
-                <img class="thumb" src="<?= CAR_UPLOAD_WEB ?>/<?= Security::e($car['image_path']) ?>" alt="">
+                <img class="thumb" src="<?= Security::e(Storage::url('cars', $car['image_path'])) ?>" alt="">
             <?php endif; ?>
             <input type="file" id="image" name="image" accept="image/jpeg,image/png" <?= $isEdit ? '' : 'required' ?>>
             <?php if (!empty($errors['image'])): ?><span class="field-error"><?= Security::e($errors['image']) ?></span><?php endif; ?>

@@ -5,7 +5,7 @@
         <?= Security::csrfField() ?>
         <div class="profile-photo">
             <?php if (!empty($user['profile_picture'])): ?>
-                <img src="<?= PROFILE_UPLOAD_WEB ?>/<?= Security::e($user['profile_picture']) ?>" alt="Profile">
+                <img src="<?= Security::e(Storage::url('profiles', $user['profile_picture'])) ?>" alt="Profile">
             <?php else: ?>
                 <div class="avatar-placeholder"><?= Security::e(mb_substr($user['name'], 0, 1)) ?></div>
             <?php endif; ?>

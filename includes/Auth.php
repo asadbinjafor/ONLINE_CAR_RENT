@@ -17,6 +17,7 @@ class Auth
 
     public static function login(array $user): void
     {
+        session_regenerate_id(true);
         $_SESSION['user_id'] = (int) $user['id'];
         $_SESSION['name'] = $user['name'];
         $_SESSION['role'] = $user['role'];
@@ -44,6 +45,7 @@ class Auth
             'path' => '/',
             'httponly' => true,
             'samesite' => 'Strict',
+            'secure' => (bool) session_get_cookie_params()['secure'],
         ]);
     }
 
@@ -54,6 +56,7 @@ class Auth
             'path' => '/',
             'httponly' => true,
             'samesite' => 'Strict',
+            'secure' => (bool) session_get_cookie_params()['secure'],
         ]);
     }
 

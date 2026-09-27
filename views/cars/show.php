@@ -1,7 +1,7 @@
 <div class="detail-layout">
     <div class="detail-media card">
         <?php if (!empty($car['image_path'])): ?>
-            <img class="detail-img" src="<?= CAR_UPLOAD_WEB ?>/<?= Security::e($car['image_path']) ?>" alt="<?= Security::e($car['name']) ?>">
+            <img class="detail-img" src="<?= Security::e(Storage::url('cars', $car['image_path'])) ?>" alt="<?= Security::e($car['name']) ?>">
         <?php else: ?>
             <div class="detail-img card-img-placeholder">🚗</div>
         <?php endif; ?>

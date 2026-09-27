@@ -25,7 +25,7 @@ class ApiController
                 'type' => $car['type'],
                 'price_per_day' => (float) $car['price_per_day'],
                 'availability_status' => $car['availability_status'],
-                'image_url' => $car['image_path'] ? CAR_UPLOAD_WEB . '/' . $car['image_path'] : null,
+                'image_url' => $car['image_path'] ? Storage::url('cars', $car['image_path']) : null,
                 'url' => app_link('/car', ['id' => (int) $car['id']]),
             ];
         }, $cars);

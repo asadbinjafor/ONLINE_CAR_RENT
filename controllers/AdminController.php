@@ -91,6 +91,9 @@ class AdminController
             return;
         }
         $this->cars->update($id, $data['fields']);
+        if (!empty($existing['image_path']) && $data['fields']['image_path'] !== $existing['image_path']) {
+            Storage::delete('cars', $existing['image_path']);
+        }
         flash('success', 'Car updated successfully.');
         redirect('/admin/cars');
     }
@@ -108,10 +111,10 @@ class AdminController
             flash('success', 'Cannot delete car with pending or confirmed orders.');
             redirect('/admin/cars');
         }
-        if (!empty($car['image_path']) && is_file(CAR_UPLOAD_DIR . $car['image_path'])) {
-            unlink(CAR_UPLOAD_DIR . $car['image_path']);
-        }
         $this->cars->delete($id);
+        if (!empty($car['image_path'])) {
+            Storage::delete('cars', $car['image_path']);
+        }
         flash('success', 'Car deleted.');
         redirect('/admin/cars');
     }
@@ -186,9 +189,6 @@ class AdminController
             } else {
                 $saved = Security::saveUpload($_FILES['image'], CAR_UPLOAD_DIR, 'car');
                 if ($saved) {
-                    if ($existing && !empty($existing['image_path']) && is_file(CAR_UPLOAD_DIR . $existing['image_path'])) {
-                        unlink(CAR_UPLOAD_DIR . $existing['image_path']);
-                    }
                     $imagePath = $saved;
                 } else {
                     $errors['image'] = 'Could not save image.';

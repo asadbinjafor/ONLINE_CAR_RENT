@@ -18,7 +18,7 @@ class CarModel
             $params[] = $type;
         }
         if ($search) {
-            $sql .= ' AND (name LIKE ? OR model LIKE ? OR description LIKE ?)';
+            $sql .= ' AND (name ILIKE ? OR model ILIKE ? OR description ILIKE ?)';
             $like = '%' . $search . '%';
             $params[] = $like;
             $params[] = $like;
@@ -43,7 +43,7 @@ class CarModel
              LEFT JOIN orders o ON o.car_id = c.id AND o.status = 'confirmed'
              WHERE c.availability_status = 'available'
              GROUP BY c.id
-             ORDER BY rent_count DESC, RAND()
+             ORDER BY rent_count DESC, RANDOM()
              LIMIT ?"
         );
         $st->bindValue(1, $limit, PDO::PARAM_INT);
@@ -60,7 +60,7 @@ class CarModel
     {
         $st = db()->prepare(
             'INSERT INTO cars (name, model, type, price_per_day, availability_status, image_path, description)
-             VALUES (?,?,?,?,?,?,?)'
+             VALUES (?,?,?,?,?,?,?) RETURNING id'
         );
         $st->execute([
             $data['name'],
@@ -71,7 +71,7 @@ class CarModel
             $data['image_path'] ?? null,
             $data['description'],
         ]);
-        return (int) db()->lastInsertId();
+        return (int) $st->fetchColumn();
     }
 
     public function update(int $id, array $data): void

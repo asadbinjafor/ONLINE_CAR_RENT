@@ -19,10 +19,10 @@ class OrderModel
     public function create(int $userId, int $carId, string $start, string $end, float $total): int
     {
         $st = db()->prepare(
-            'INSERT INTO orders (user_id, car_id, start_date, end_date, total_cost, status) VALUES (?,?,?,?,?,?)'
+            'INSERT INTO orders (user_id, car_id, start_date, end_date, total_cost, status) VALUES (?,?,?,?,?,?) RETURNING id'
         );
         $st->execute([$userId, $carId, $start, $end, $total, 'pending']);
-        return (int) db()->lastInsertId();
+        return (int) $st->fetchColumn();
     }
 
     public function updateStatus(int $id, string $status, ?string $paymentMethod = null): void

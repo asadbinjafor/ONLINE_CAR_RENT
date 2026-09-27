@@ -6,7 +6,8 @@ class Security
         if (session_status() === PHP_SESSION_ACTIVE) {
             return;
         }
-        $secure = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+        $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+            || (getenv('TRUST_PROXY') === '1' && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
         session_set_cookie_params([
             'lifetime' => 0,
             'path' => '/',
@@ -103,6 +104,9 @@ class Security
         $mime = $finfo->file($file['tmp_name']);
         $ext = $mime === 'image/png' ? 'png' : 'jpg';
         $name = $prefix . '_' . bin2hex(random_bytes(8)) . '.' . $ext;
+        if (Storage::enabled()) {
+            return Storage::upload($file['tmp_name'], $prefix === 'car' ? 'cars' : 'profiles', $name, $mime) ? $name : null;
+        }
         $path = rtrim($dir, '/\\') . DIRECTORY_SEPARATOR . $name;
         return move_uploaded_file($file['tmp_name'], $path) ? $name : null;
     }

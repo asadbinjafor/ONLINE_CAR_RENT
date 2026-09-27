@@ -65,10 +65,7 @@ class AuthController
         $confirm = $_POST['password_confirm'] ?? '';
         $address = trim($_POST['address'] ?? '');
         $phone = trim($_POST['phone'] ?? '');
-        $role = $_POST['role'] ?? 'member';
-        if (!in_array($role, ['admin', 'member'], true)) {
-            $role = 'member';
-        }
+        $role = 'member';
         $errors = [];
         if ($name === '') {
             $errors['name'] = 'Name is required.';

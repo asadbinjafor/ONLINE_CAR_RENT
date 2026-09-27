@@ -4,10 +4,10 @@ class PaymentModel
     public function create(int $orderId, float $amount, string $method, ?string $transactionId): int
     {
         $st = db()->prepare(
-            'INSERT INTO payments (order_id, amount, payment_method, transaction_id) VALUES (?,?,?,?)'
+            'INSERT INTO payments (order_id, amount, payment_method, transaction_id) VALUES (?,?,?,?) RETURNING id'
         );
         $st->execute([$orderId, $amount, $method, $transactionId]);
-        return (int) db()->lastInsertId();
+        return (int) $st->fetchColumn();
     }
 
     public function findByOrderId(int $orderId): ?array
